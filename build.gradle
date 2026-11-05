@@ -149,6 +149,7 @@ dependencies {
     implementation "curse.maven:spartan-weaponry-unofficial-1450963:8423182"
     compileOnly "curse.maven:official-epic-fight-x-parcool-1259252:7490217"
     compileOnly "curse.maven:epic-fight-mod-405076:8175609"
+    compileOnly "curse.maven:lr-tactical-1-21-1-1432620:8745260"
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
