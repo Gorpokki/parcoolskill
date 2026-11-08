@@ -1,10 +1,12 @@
 {
   "required": true,
   "package": "com.xm666.parcoolskill.mixin",
+  "plugin": "com.xm666.parcoolskill.MixinConfigPlugin",
   "compatibilityLevel": "JAVA_21",
   "mixinPriority": 900,
   "mixins": [
     "epicparcool.AnimationsMixin$ParCoolAnimationsMixin",
+    "lrtactical.MeleeAttackMixin$IMeleeWeaponMixin",
     "parcoolskill.event.DamageBlockMixin$LivingEntityMixin",
     "parcoolskill.event.PlayerAttackMixin$PlayerMixin",
     "parcoolskill.skill.BackflipMixin$FlippingMixin",
@@ -22,7 +24,6 @@
     "requireAnnotations": true
   },
   "client": [
-    "parcoolskill.animation.SwimAnimationMixin$PlayerRendererMixin",
     "parcoolskill.skill.BackflipMixin$ActionProcessorMixin",
     "parcoolskill.skill.BackflipMixin$PlayerModelRotatorMixin",
     "parcoolskill.skill.BackflipMixin$PlayerModelTransformerMixin",
