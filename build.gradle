@@ -152,6 +152,12 @@ dependencies {
     compileOnly "curse.maven:lr-tactical-1-21-1-1432620:8745260"
 }
 
+tasks.register('copyBootMods', Copy) {
+    from configurations.runtimeClasspath
+    include 'parcool-482378-*.jar', 'timescalelib-1542930-*.jar'
+    into layout.buildDirectory.dir('boot-mods')
+}
+
 // This block of code expands all declared replace properties in the specified resource targets.
 // A missing property will result in an error. Properties are expanded using ${} Groovy notation.
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
