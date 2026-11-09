@@ -22,7 +22,7 @@ jobs:
           java-version: '21'
 
       - name: Build mod jar
-        run: ./gradlew build
+        run: bash ./gradlew build
 
       - name: Install NeoForge server and runtime dependencies
         env:
@@ -49,7 +49,7 @@ jobs:
         uses: Gorpokki/minecraft-mod-actions/server-boot@fca1c54653822990b918578721acade3c732513b # v1.1.0
         with:
           server-dir: server
-          start-command: ./run.sh nogui
+          start-command: bash ./run.sh nogui
           timeout-seconds: '600'
 
       - name: Upload server log
