@@ -22,25 +22,17 @@ jobs:
           java-version: '21'
 
       - name: Build mod jar
-        run: bash ./gradlew build
+        run: bash ./gradlew build copyBootMods
 
       - name: Install NeoForge server and runtime dependencies
         env:
           NEOFORGE: '21.1.230'
           NEOFORGE_SHA256: 88f4a6efd54049b7c14f4588e879a964d1868688fd52efb64b29dd03ad991ef1
-          PARCOOL_URL: https://edge.forgecdn.net/files/7760/593/ParCool-1.21.1-3.4.3.3-NF.jar
-          PARCOOL_SHA256: 023774b63cbacf9f17ea6404a212ec2e4e4f9777f1b7bbaea8fbb62f3f0463db
-          TIMESCALELIB_URL: https://edge.forgecdn.net/files/9492/135/timescalelib-1.3.0.jar
-          TIMESCALELIB_SHA256: 065e1231262cab7e537e17a3ef7e74d2dd2663264950eb2102fe3255f890440b
         run: |
           mkdir -p server/mods "$RUNNER_TEMP/downloads"
           curl -fsSLo "$RUNNER_TEMP/downloads/neoforge-installer.jar" "https://maven.neoforged.net/releases/net/neoforged/neoforge/$NEOFORGE/neoforge-$NEOFORGE-installer.jar"
           echo "$NEOFORGE_SHA256  $RUNNER_TEMP/downloads/neoforge-installer.jar" | sha256sum -c -
-          curl -fsSLo server/mods/parcool.jar "$PARCOOL_URL"
-          echo "$PARCOOL_SHA256  server/mods/parcool.jar" | sha256sum -c -
-          curl -fsSLo server/mods/timescalelib.jar "$TIMESCALELIB_URL"
-          echo "$TIMESCALELIB_SHA256  server/mods/timescalelib.jar" | sha256sum -c -
-          cp build/libs/*.jar server/mods/
+          cp build/boot-mods/*.jar build/libs/*.jar server/mods/
           printf 'eula=true\n' > server/eula.txt
           (cd server && java -jar "$RUNNER_TEMP/downloads/neoforge-installer.jar" --installServer)
 
