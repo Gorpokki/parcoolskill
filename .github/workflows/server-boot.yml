@@ -1,0 +1,53 @@
+name: Server boot
+
+on:
+  pull_request:
+    branches: [mixin-priority-900, fm/rebuild-parcoolskill]
+
+permissions:
+  contents: read
+
+jobs:
+  boot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Build mod jar
+        run: bash ./gradlew build copyBootMods
+
+      - name: Install NeoForge server and runtime dependencies
+        env:
+          NEOFORGE: '21.1.230'
+          NEOFORGE_SHA256: 88f4a6efd54049b7c14f4588e879a964d1868688fd52efb64b29dd03ad991ef1
+        run: |
+          mkdir -p server/mods "$RUNNER_TEMP/downloads"
+          curl -fsSLo "$RUNNER_TEMP/downloads/neoforge-installer.jar" "https://maven.neoforged.net/releases/net/neoforged/neoforge/$NEOFORGE/neoforge-$NEOFORGE-installer.jar"
+          echo "$NEOFORGE_SHA256  $RUNNER_TEMP/downloads/neoforge-installer.jar" | sha256sum -c -
+          cp build/boot-mods/*.jar build/libs/*.jar server/mods/
+          printf 'eula=true\n' > server/eula.txt
+          (cd server && java -jar "$RUNNER_TEMP/downloads/neoforge-installer.jar" --installServer)
+
+      - name: Boot server
+        id: boot
+        uses: Gorpokki/minecraft-mod-actions/server-boot@fca1c54653822990b918578721acade3c732513b # v1.1.0
+        with:
+          server-dir: server
+          start-command: bash ./run.sh nogui
+          timeout-seconds: '600'
+
+      - name: Upload server log
+        if: always() && steps.boot.outputs.log-path != ''
+        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.2
+        with:
+          name: server-boot-log
+          path: ${{ steps.boot.outputs.log-path }}
+          if-no-files-found: ignore
