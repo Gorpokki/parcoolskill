@@ -2,7 +2,7 @@ name: Server boot
 
 on:
   pull_request:
-    branches: [mixin-priority-900, fm/rebuild-parcoolskill]
+    branches: [fm/rebuild-parcoolskill]
 
 permissions:
   contents: read
