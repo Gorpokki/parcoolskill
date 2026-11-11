@@ -33,10 +33,6 @@ jobs:
           curl -fsSLo "$RUNNER_TEMP/downloads/neoforge-installer.jar" "https://maven.neoforged.net/releases/net/neoforged/neoforge/$NEOFORGE/neoforge-$NEOFORGE-installer.jar"
           echo "$NEOFORGE_SHA256  $RUNNER_TEMP/downloads/neoforge-installer.jar" | sha256sum -c -
           cp build/boot-mods/*.jar build/libs/*.jar server/mods/
-          # build.gradle pins timescalelib 1.2.10, but the mod requires [1.3.0,)
-          rm server/mods/timescalelib-*.jar
-          curl -fsSLo server/mods/timescalelib-1542930-9492135.jar "https://www.cursemaven.com/curse/maven/timescalelib-1542930/9492135/timescalelib-1542930-9492135.jar"
-          echo "065e1231262cab7e537e17a3ef7e74d2dd2663264950eb2102fe3255f890440b  server/mods/timescalelib-1542930-9492135.jar" | sha256sum -c -
           printf 'eula=true\n' > server/eula.txt
           (cd server && java -jar "$RUNNER_TEMP/downloads/neoforge-installer.jar" --installServer)
 
