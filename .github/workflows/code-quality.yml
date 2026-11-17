@@ -75,7 +75,7 @@ jobs:
           python3 -m pip install zizmor==1.30.1
       - name: Lint changed code with Qlty
         if: ${{ !(startsWith(github.head_ref, 'sync/') && github.event.pull_request.head.repo.full_name == github.repository) }}
-        run: qlty check --upstream "$BASE" --no-formatters --no-progress --level medium --fail-level medium --no-fail --sarif > "$RUNNER_TEMP/qlty-check.sarif"
+        run: qlty check --upstream "$BASE" --no-formatters --no-progress --level medium --no-fail --sarif > "$RUNNER_TEMP/qlty-check.sarif"
       - name: Gate Qlty findings on changed lines
         if: ${{ !(startsWith(github.head_ref, 'sync/') && github.event.pull_request.head.repo.full_name == github.repository) }}
         uses: Gorpokki/minecraft-mod-actions/sarif-changed-lines@fca1c54653822990b918578721acade3c732513b # v1.1.0
