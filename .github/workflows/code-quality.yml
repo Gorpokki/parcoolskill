@@ -83,19 +83,19 @@ jobs:
           sarif-file: ${{ runner.temp }}/qlty-check.sarif
           base: ${{ env.BASE }}
       - name: Scan changed code for Qlty smells
-        if: ${{ !(startsWith(github.head_ref, 'sync/') && github.event.pull_request.head.repo.full_name == github.repository) }}
+        if: ${{ !(startsWith(github.head_ref, 'sync/') && github.event.pull_request.head.repo.full_name == github.repository) && !cancelled() && env.BASE != '' }}
         run: qlty smells --upstream "$BASE" --quiet --sarif > "$RUNNER_TEMP/qlty-smells.sarif"
       - name: Gate Qlty smells on changed lines
-        if: ${{ !(startsWith(github.head_ref, 'sync/') && github.event.pull_request.head.repo.full_name == github.repository) }}
+        if: ${{ !(startsWith(github.head_ref, 'sync/') && github.event.pull_request.head.repo.full_name == github.repository) && !cancelled() && env.BASE != '' }}
         uses: Gorpokki/minecraft-mod-actions/sarif-changed-lines@fca1c54653822990b918578721acade3c732513b # v1.1.0
         with:
           sarif-file: ${{ runner.temp }}/qlty-smells.sarif
           base: ${{ env.BASE }}
       - name: Scan workflows with zizmor
-        if: ${{ !(startsWith(github.head_ref, 'sync/') && github.event.pull_request.head.repo.full_name == github.repository) }}
+        if: ${{ !(startsWith(github.head_ref, 'sync/') && github.event.pull_request.head.repo.full_name == github.repository) && !cancelled() && env.BASE != '' }}
         run: zizmor --no-progress --no-exit-codes --format sarif .github/workflows > "$RUNNER_TEMP/zizmor.sarif"
       - name: Gate zizmor findings on changed lines
-        if: ${{ !(startsWith(github.head_ref, 'sync/') && github.event.pull_request.head.repo.full_name == github.repository) }}
+        if: ${{ !(startsWith(github.head_ref, 'sync/') && github.event.pull_request.head.repo.full_name == github.repository) && !cancelled() && env.BASE != '' }}
         uses: Gorpokki/minecraft-mod-actions/sarif-changed-lines@fca1c54653822990b918578721acade3c732513b # v1.1.0
         with:
           sarif-file: ${{ runner.temp }}/zizmor.sarif
@@ -115,10 +115,10 @@ jobs:
             *.cs
             *.java
       - name: Check workflows for new supply-chain risks
-        if: ${{ !(startsWith(github.head_ref, 'sync/') && github.event.pull_request.head.repo.full_name == github.repository) }}
+        if: ${{ !(startsWith(github.head_ref, 'sync/') && github.event.pull_request.head.repo.full_name == github.repository) && !cancelled() && env.BASE != '' }}
         run: poutine analyze_local . --quiet --format sarif > "$RUNNER_TEMP/poutine.sarif"
       - name: Gate poutine findings on changed lines
-        if: ${{ !(startsWith(github.head_ref, 'sync/') && github.event.pull_request.head.repo.full_name == github.repository) }}
+        if: ${{ !(startsWith(github.head_ref, 'sync/') && github.event.pull_request.head.repo.full_name == github.repository) && !cancelled() && env.BASE != '' }}
         uses: Gorpokki/minecraft-mod-actions/sarif-changed-lines@fca1c54653822990b918578721acade3c732513b # v1.1.0
         with:
           sarif-file: ${{ runner.temp }}/poutine.sarif
